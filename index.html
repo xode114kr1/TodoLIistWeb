@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <title>Document</title>
+    <style>
+        body{
+            border: 0;
+            padding: 0;
+            height: 100%;
+            background-color: rgb(255,252,240);
+        }
+        header{
+            display: flex;
+            position: fixed;
+            background-color: white;
+            z-index: 1;
+            top: 0px;
+            height: 70px;
+            width: 100%;
+        }
+        .headerDiv{
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            max-width: 1224px;
+            margin: auto auto;
+            flex-grow: 1;
+            
+        }
+        .headerLeft{
+            display: flex;
+            align-items: center;
+            flex-grow: 1;
+            gap: 20px;
+        }
+
+        .headerLeftNav{
+            display: flex;
+            gap: 10px
+        }
+
+        .headerLeftNav div{
+            color: rgb(77,81,89);
+            transform: color 0.5 ease;
+            font-size: 25px;
+            font-weight: bold;
+        }
+
+        .headerLeftNav div:hover{
+            color: rgb(147,151,159);
+        }
+
+        .headerRight{
+            display: flex;
+            align-items: center;
+            justify-content: end;
+            gap : 5px;
+            flex-grow: 1;
+        }
+        .headerRightCalendar{
+            font-size: 20px;
+            border-radius: 5px;
+            width: 250px;
+            height: 40px;
+            padding-left: 10px;
+        }
+
+        main{
+            display: flex;
+            gap: 20px;
+            position: relative;
+            top: 75px;
+            flex-direction: column;
+            width: 100%;
+        }
+
+        .mainSection1{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            max-width: 1224px;
+            margin: auto auto;
+            width: 100%;
+        }
+        .mainSection1 form{
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .mainSection1AddSchedule{
+            font-size: 20px;
+            border-radius: 10px;
+            padding: 0 10px;
+            width: 700px;
+            height: 40px;
+        }
+        
+        .mainSection2{
+            display: flex;
+            justify-content: center;
+        }
+
+        .mainSection2Container{
+            display: flex;
+            width: 100%;
+            height: 750px;
+            border-radius: 20px;
+            max-width: 1024px;
+            border: 2px solid black;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .mainSection2List{
+            font-size: 20px;
+            font-weight: bold;
+            background-color: white;
+            height: 600px;
+            width: 70%;
+            border-radius: 10px;
+            padding: 20px;
+            overflow: auto;
+        }
+        
+    </style>
+</head>
+<body>
+    <header>
+        <div class="headerDiv">
+            <div class="headerLeft">
+                <img src="media/icon-logo.png" height="60px">
+                <nav class="headerLeftNav">
+                    <div>일정 검색</div>
+                    <div>일정 등록</div>
+                    <div>일정 수정</div>
+                </nav>
+            </div>
+            <div class="headerRight">
+                <input type="text" class="headerRightCalendar" id="headerCalendarId" placeholder="날짜 선택">
+                <label for="headerCalendarId"><img src="media/icon-calendar.png" alt="달력" width="50px"></label>
+            </div>
+        </div>
+    </header>
+    <main>
+        <section class="mainSection1">
+            <form id="addScheduleId" onsubmit="return addScheduleForm(event)">
+                <input type="text" id="addScheduleTextId" class="mainSection1AddSchedule" placeholder="할 일을 추가해 주세요" required>
+                <input type="image" src="media/icon-additionThick.png" width="30px">
+            </form>
+        </section>
+        <section class="mainSection2">
+            <div class="mainSection2Container">
+                <ul class="mainSection2List" id="mainSection2ListId">
+
+                </ul>
+            </div>
+        </section>
+        
+    </main>
+    <footer>
+
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script>
+        const mainsection2list = document.getElementById("mainSection2ListId");
+        let scheduleList = [];
+
+        flatpickr("#headerCalendarId", {
+            locale: "ko",
+            dateFormat: "Y-m-d"
+        });
+
+        function addScheduleForm(event){
+            event.preventDefault();
+
+            const addscheduletext = document.getElementById("addScheduleTextId").value;
+
+            const schedule = {
+                date : new Date(),
+                state : "Todo",
+                text : addscheduletext
+            };
+            scheduleList.push(schedule);
+
+            mainsection2list.insertAdjacentHTML(
+                "beforeend",
+                `<li>${addscheduletext}</li>`
+            );
+
+            document.getElementById("addScheduleId").reset();
+        }
+    </script>
+</body>
+
+</html>
