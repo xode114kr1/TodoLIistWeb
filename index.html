@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <title>Document</title>
     <style>
         body{
@@ -12,6 +11,7 @@
             height: 100%;
             background-color: rgb(255,252,240);
         }
+
         header{
             display: flex;
             position: fixed;
@@ -21,7 +21,8 @@
             height: 70px;
             width: 100%;
         }
-        .headerDiv{
+
+        .header-container{
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -30,37 +31,38 @@
             flex-grow: 1;
             
         }
-        .headerLeft{
+        .header-left{
             display: flex;
             align-items: center;
             flex-grow: 1;
             gap: 20px;
         }
 
-        .headerLeftNav{
+        .header-left-nav{
             display: flex;
-            gap: 10px
+            gap: 15px
         }
 
-        .headerLeftNav div{
+        .header-left-nav div{
             color: rgb(77,81,89);
             transform: color 0.5 ease;
             font-size: 25px;
             font-weight: bold;
         }
 
-        .headerLeftNav div:hover{
+        .header-left-nav div:hover{
             color: rgb(147,151,159);
         }
 
-        .headerRight{
+        .header-right{
             display: flex;
             align-items: center;
             justify-content: end;
             gap : 5px;
             flex-grow: 1;
         }
-        .headerRightCalendar{
+
+        .calendar-date{
             font-size: 20px;
             border-radius: 5px;
             width: 250px;
@@ -70,130 +72,210 @@
 
         main{
             display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
             gap: 20px;
             position: relative;
             top: 75px;
-            flex-direction: column;
             width: 100%;
         }
 
-        .mainSection1{
+        .add-schedule-container{
             display: flex;
-            align-items: center;
             justify-content: center;
             max-width: 1224px;
-            margin: auto auto;
             width: 100%;
         }
-        .mainSection1 form{
+        .add-schedule-form{
             display: flex;
-            align-items: center;
+            align-self: center;
             gap: 10px;
         }
-
-        .mainSection1AddSchedule{
-            font-size: 20px;
+        .add-schedule-text{
+            width: 700px;
+            height: 30px;
             border-radius: 10px;
             padding: 0 10px;
-            width: 700px;
-            height: 40px;
-        }
-        
-        .mainSection2{
-            display: flex;
-            justify-content: center;
-        }
-
-        .mainSection2Container{
-            display: flex;
-            width: 100%;
-            height: 750px;
-            border-radius: 20px;
-            max-width: 1024px;
-            border: 2px solid black;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .mainSection2List{
             font-size: 20px;
-            font-weight: bold;
-            background-color: white;
-            height: 600px;
-            width: 70%;
-            border-radius: 10px;
-            padding: 20px;
-            overflow: auto;
         }
-        
+        .addScheduleButton{
+            background-image: url('media/icon-additionThick.png');
+            background-color: transparent;
+            background-size: cover;
+            border-radius: 5px;
+            border: none;
+            width: 30px;
+            height: 30px;
+        }
+
+        .schedule-list-container{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap : 20px;
+        }
+
+        .energy-bar{
+            width: 700px;
+            height: 20px;
+            border-radius: 20px;
+            background-color: #f0f0f0;
+            overflow: hidden;
+        }
+
+        .energy-fill{
+            width: 0;
+            height: 100%;
+            background-color: #4caf50;
+            transition: width 0.3s ease;
+        }
+
+        .schedule-list{
+            display: flex;
+            flex-direction: column;
+            width: 940px;
+            height: 700px;
+            background-color: white;
+            padding: 10px 20px;
+            border-radius: 15px;
+            overflow: auto;
+            font-size: 20px;
+        }
+
+        @media (min-width: 701px) and (max-width:820px){
+            .headerLeftNav span{
+                display: block;
+                padding: 0;
+                border: 0;
+                margin: 0;
+            }
+        }
+
+        @media (max-width : 660px) {
+            .headerLeftNav{
+                display: none;
+            }
+        }
     </style>
 </head>
 <body>
     <header>
-        <div class="headerDiv">
-            <div class="headerLeft">
+        <div class="header-container">
+            <div class="header-left">
                 <img src="media/icon-logo.png" height="60px">
-                <nav class="headerLeftNav">
-                    <div>일정 검색</div>
-                    <div>일정 등록</div>
-                    <div>일정 수정</div>
+                <nav class="header-left-nav">
+                    <div><span>일정</span> 검색</div>
+                    <div><span>일정</span> 등록</div>
+                    <div><span>일정</span> 수정</div>
                 </nav>
             </div>
-            <div class="headerRight">
-                <input type="text" class="headerRightCalendar" id="headerCalendarId" placeholder="날짜 선택">
-                <label for="headerCalendarId"><img src="media/icon-calendar.png" alt="달력" width="50px"></label>
+            <div class="header-right">
+                <input type="date" id = "calendarDate" class="calendar-date">
             </div>
         </div>
     </header>
     <main>
-        <section class="mainSection1">
-            <form id="addScheduleId" onsubmit="return addScheduleForm(event)">
-                <input type="text" id="addScheduleTextId" class="mainSection1AddSchedule" placeholder="할 일을 추가해 주세요" required>
-                <input type="image" src="media/icon-additionThick.png" width="30px">
+        <section class="add-schedule-container">
+            <form class="add-schedule-form">
+                <input type="text" id="addScheduleText" class="add-schedule-text" placeholder="할 일을 추가하세요" required>
+                <button id="addScheduleButton" class="addScheduleButton" onclick="addTodaySchedule()"></button>
             </form>
         </section>
-        <section class="mainSection2">
-            <div class="mainSection2Container">
-                <ul class="mainSection2List" id="mainSection2ListId">
-
-                </ul>
+        <section class="schedule-list-container">
+            <div class="energy-bar">
+                <div id="energyFill" class="energy-fill"></div>
+            </div>
+            <div id="scheduleList" class="schedule-list">
+                
             </div>
         </section>
-        
     </main>
-    <footer>
 
-    </footer>
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-    <script>
-        const mainsection2list = document.getElementById("mainSection2ListId");
-        let scheduleList = [];
+</body>
+<script>
 
-        flatpickr("#headerCalendarId", {
-            locale: "ko",
-            dateFormat: "Y-m-d"
+    const addTodaySchedule = () => { // 당일 일정 추가
+        // id 연결
+        const calendarDate = document.getElementById("calendarDate"); // 달력 날짜 id받기
+        const addScheduleText = document.getElementById("addScheduleText"); // 추가 일정 id받기
+
+        addSchedule(calendarDate.value, addScheduleText.value);
+        addScheduleText.value = "";
+    }
+
+    const addSchedule = (date, text) => { // 날짜, 텍스트를 받아 일정 추가
+
+        event.preventDefault(); // 초기화 금지
+
+        // 로컬 저장소로부터 데이터 받아오기
+        const dataStr = localStorage.getItem("data"); // localstorage로 부터 date라는 데이터 받아오기
+
+        if (dataStr == null) { // 로컬저장소에 data가 없다면 로컬 저장소에 date라는 빈 값 추가하기
+            localStorage.setItem("data", JSON.stringify({})); 
+        }
+
+        const data = JSON.parse(localStorage.getItem("data")); // data를 json에서 객체로 변환하여 data에 저장
+
+        // 데이터를 로컬 저장소에 저장
+        if(data[calendarDate.value] == null){ // 현재 날짜가 없다면 빈 공간을 추가
+            data[calendarDate.value] = [];
+        }
+        data[calendarDate.value].push({ // data[날짜]에 일정 추가
+            content : addScheduleText.value,
+            progress : false
         });
 
-        function addScheduleForm(event){
-            event.preventDefault();
+        localStorage.setItem("data", JSON.stringify(data)) // data객체를 json으로 변환하여 로컬저장소의 data에 저장
+        changeDate();
+    }
 
-            const addscheduletext = document.getElementById("addScheduleTextId").value;
+    const calendarDate = document.getElementById("calendarDate"); // 달력 날짜 id받기
+    calendarDate.addEventListener('change', (event) => {
+        const selectDate = event.target.value;
+        changeDate();
+    })
 
-            const schedule = {
-                date : new Date(),
-                state : "Todo",
-                text : addscheduletext
-            };
-            scheduleList.push(schedule);
 
-            mainsection2list.insertAdjacentHTML(
-                "beforeend",
-                `<li>${addscheduletext}</li>`
-            );
+    const changeDate = () => {
+        const calendarDate = document.getElementById("calendarDate"); // 달력 날짜 id받기
+        const scheduleList = document.getElementById("scheduleList"); // 스케줄 리스트 id받기
+        scheduleList.innerHTML = "";
+        let scheduleArray = getCurSchedule(calendarDate.value);
 
-            document.getElementById("addScheduleId").reset();
+        scheduleArray.forEach(schedule => {
+            if(schedule.progress == true){
+                scheduleList.insertAdjacentHTML(
+                    "beforeend",
+                    `<label><input type="checkbox" class="schedule-item" checked>${schedule.content}</label><br>`
+                )
+            }
+            else{
+                scheduleList.insertAdjacentHTML(
+                    "beforeend",
+                    `<label><input type="checkbox" class="schedule-item">${schedule.content}</label><br>`
+                )
+            }
+        })
+    }
+
+    const getCurSchedule = (date) => { // 날짜로 부터 일정 리스트 받아오기
+        const dataStr = localStorage.getItem("data");
+
+        if (dataStr == null) { 
+            localStorage.setItem("data", JSON.stringify({})); 
         }
-    </script>
-</body>
 
+        const data = JSON.parse(localStorage.getItem("data"));
+
+        if(data[date] == null){
+            return [];
+        }
+        else{
+            return data[date];
+        }
+    }
+
+</script>
 </html>
