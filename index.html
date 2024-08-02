@@ -135,7 +135,7 @@
             display: flex;
             flex-direction: column;
             width: 940px;
-            height: 800px;
+            height: 750px;
             background-color: white;
             padding: 10px 20px;
             border-radius: 15px;
@@ -161,12 +161,12 @@
             top: 4px;
             width: 30px;
             height: 0px;
-            background: url("media/icon-blankbox.png") no-repeat center center;
+            background: url("C:/Users/user/Desktop/TodoLIistWeb-main/TodoLIistWeb-main/media/icon-blankbox.png") no-repeat center center;
             background-size: contain;
         }
 
         .custom-checkbox:checked + .custom-label:before {
-            background: url("media/icon-checkbox.png") no-repeat center center;
+            background: url("../TodoLIistWeb-main/media/icon-checkbox.png") no-repeat center center;
             background-size: contain;
         }
 
@@ -213,11 +213,9 @@
             <div class="energy-bar">
                 <div id="energyFill" class="energy-fill"></div>
             </div>
-            <ul id="scheduleList" class="schedule-list">
-                <li>
-                    <label class="custom-label"><input type="checkbox" class="custom-checkbox" checked>${schedule.content}</label>
-                </li>
-            </ul>
+            <div id="scheduleList" class="schedule-list">
+
+            </div>
         </section>
     </main>
 
@@ -225,9 +223,27 @@
 <script>
 
     const scheduleList = document.getElementById("scheduleList");
-    scheduleList.addEventListener('change', (event) => { // checkbox가 체크/ 체크해제 될 때 이벤트 발생
+
+// div 요소에 이벤트 리스너 등록
+    scheduleList.addEventListener('change', (event) => {
         updateEnergyBar();
-    })
+
+        const calendarDate = document.getElementById("calendarDate"); // 달력 날짜 id받기
+        // 이벤트가 발생한 요소가 체크박스인지 확인
+        const data = JSON.parse(localStorage.getItem("data"));
+
+        if (event.target && event.target.matches('input.custom-checkbox')) {
+            // 체크박스의 값 가져오기
+            const value = event.target.value;
+            if (event.target.checked) {
+                data[calendarDate.value][value].progress = true;
+            } 
+            else {
+                data[calendarDate.value][value].progress = false;
+            }
+        }
+        localStorage.setItem("data", JSON.stringify(data));
+    });
 
     const updateEnergyBar = () => { //에너지바 업데이트
         let chkcnt = 0;
@@ -268,10 +284,12 @@
         const dataStr = localStorage.getItem("data"); // localstorage로 부터 date라는 데이터 받아오기
 
         if (dataStr == null) { // 로컬저장소에 data가 없다면 로컬 저장소에 date라는 빈 값 추가하기
-            localStorage.setItem("data", JSON.stringify({})); 
+            let empty = {};
+            localStorage.setItem("data", JSON.stringify(empty));
         }
 
         const data = JSON.parse(localStorage.getItem("data")); // data를 json에서 객체로 변환하여 data에 저장
+        
         // 데이터를 로컬 저장소에 저장
         if(data[calendarDate.value] == null){ // 현재 날짜가 없다면 빈 공간을 추가
             data[calendarDate.value] = [];
@@ -281,7 +299,7 @@
             progress : false
         });
 
-        localStorage.setItem("data", JSON.stringify(data)) // data객체를 json으로 변환하여 로컬저장소의 data에 저장
+        localStorage.setItem("data", JSON.stringify(data)); // data객체를 json으로 변환하여 로컬저장소의 data에 저장
         writeTodaySchedule();
         updateEnergyBar();
     }
@@ -305,20 +323,20 @@
         scheduleList.innerHTML = "";
         let scheduleArray = getCurSchedule(date);
 
-        scheduleArray.forEach(schedule => {
-            if(schedule.progress == true){
+        for(let i = 0; i < scheduleArray.length; i++){
+            if(scheduleArray[i].progress == true){
                 scheduleList.insertAdjacentHTML(
                     "beforeend",
-                    `<li><label><input type="checkbox" class="schedule-item" checked>${schedule.content}</label></li>`
+                    `<label class="custom-label"><input type="checkbox" class="custom-checkbox" value = "${i}" checked>${scheduleArray[i].content}</label>`
                 )
             }
             else{
                 scheduleList.insertAdjacentHTML(
                     "beforeend",
-                    `<li><label><input type="checkbox" class="schedule-item">${schedule.content}</label></li>`
+                    `<label class="custom-label"><input type="checkbox" class="custom-checkbox" value = "${i}">${scheduleArray[i].content}</label>`
                 )
             }
-        })
+        }
     }
 
     const getCurSchedule = (date) => { // 날짜로 부터 일정 리스트 받아오기
@@ -356,10 +374,9 @@
         dateInput.value = todayString;
     }
 
-
-
         // 페이지 로드 시 하는 작업
-    //window.onload = writeSchedule(dateToString(new Date())); // 오늘 스케줄
-    //window.onload = setToday();  // 페이지 로드 시 오늘 날짜로 설정
+    window.onload = writeSchedule(dateToString(new Date())); // 오늘 스케줄
+    window.onload = setToday();  // 페이지 로드 시 오늘 날짜로 설정
+    window.onload = updateEnergyBar();
 </script>
 </html>
